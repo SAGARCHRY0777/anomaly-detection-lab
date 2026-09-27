@@ -119,7 +119,7 @@ def test_residual_is_small_on_normal_and_large_on_break():
     run = data.simulate_run(1500, seed=99)
     clean = det.residuals(run.X)
     # Not ~0: ambient temperature is unobserved, so each run carries a small bias.
-    # That is realistic — and why real systems feed ambient in as an input.
+    # That is realistic â€” and why real systems feed ambient in as an input.
     assert np.all(np.abs(np.median(clean, axis=0)) < 1.5)
     data.inject(run, "correlation_break", "egt", 600, 150, magnitude=1.0)
     R = det.residuals(run.X)
