@@ -158,7 +158,10 @@ def main():
         ev = event_metrics(y, a)
         f1 = point_metrics(y, a)["f1"]
         pa = point_metrics(y, point_adjust(y, a))["f1"]
-        print(f"{name:22s} {ev['event_recall']:10.2f} {ev['fa_per_10k']:8.2f} {ev['mean_delay']:6.1f} "
+        # delay is undefined when a detector fired on nothing; print a dash
+        # rather than a bare nan, which reads as a crash instead of a result
+        delay = "-".rjust(6) if np.isnan(ev["mean_delay"]) else f"{ev['mean_delay']:6.1f}"
+        print(f"{name:22s} {ev['event_recall']:10.2f} {ev['fa_per_10k']:8.2f} {delay} "
               f"{f1:6.2f} {pa:6.2f} {secs:5.1f}")
 
     print("\nPer-anomaly-type event recall  (which detector sees what):\n")

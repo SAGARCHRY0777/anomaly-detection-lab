@@ -86,10 +86,22 @@ Empirically, path lengths converge by $t \approx 100$ trees, and $\psi = 256$ wo
 
 ## 5.7 The benchmark lesson: representation beats algorithm
 
+These are the two `isolation forest` rows printed by `examples/benchmark.py`,
+which you can reproduce exactly — the run is seeded:
+
 | Input | Event recall | FA / 10k |
 |---|---|---|
-| raw standardised sensors | 10% | 4.0 |
-| residuals from lesson 7 | **75%** | 3.2 |
+| raw standardised sensors | **0.00** | 0.00 |
+| residuals from lesson 7 | **0.82** | 2.28 |
+
+**The raw row is zero, not merely low, and that is the result — not a broken
+build.** At the calibrated threshold the detector fires on essentially nothing,
+which is why its false-alarm rate is also zero and its mean delay prints as a
+dash: there were no detections to measure a delay over. Per anomaly type it
+scores 0.00 on all six, including spikes. If you were expecting a bug, note that
+`test_iforest_ranks_like_sklearn` checks this same implementation against
+scikit-learn on scattered outliers and passes — the algorithm is fine, the
+*input representation* is not.
 
 Identical code. In raw space normal data is a long curved manifold with dense and sparse parts;
 a +50 °C EGT fault lands where another healthy operating point already lives. In residual space
