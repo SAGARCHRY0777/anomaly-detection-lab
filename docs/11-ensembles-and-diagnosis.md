@@ -6,15 +6,17 @@ Code: `rank_ensemble` in `examples/benchmark.py`, `per_kind_recall` in `src/adla
 
 Per-fault-type event recall (benchmark, `--fast`, 2-of-3 debounce):
 
-| Detector | spike | level shift | drift | stuck | noise burst | corr. break |
+These rows come from a seeded run of `examples/benchmark.py`; rerun it to reproduce them.
+
+| Detector | spike | level_shift | drift | stuck | noise_burst | correlation |
 |---|---|---|---|---|---|---|
-| zscore (global) | 0 | .25 | .33 | 0 | 0 | .25 |
-| stuck detector | 0 | 0 | 0 | **1.00** | .33 | 0 |
-| PCA SPE | 0 | .25 | .67 | .33 | **.67** | .25 |
-| residual (ridge) | **1.00** | .75 | **1.00** | .33 | **.67** | **.75** |
-| residual + CUSUM | .33 | **1.00** | **1.00** | .67 | 0 | **.75** |
+| zscore (global) | 0 | 0 | 0 | 0.17 | 0 | 0 |
+| stuck detector | 0 | 0 | 0 | **1.00** | 0 | 0 |
+| PCA SPE | 0 | 0.29 | 0.50 | 0.17 | 0.43 | 0.29 |
+| residual (ridge) | 0.86 | 0.86 | **1.00** | 0.50 | 0.86 | 0.86 |
+| residual + CUSUM | 0.29 | 0.71 | 0.67 | 0.67 | 0.29 | 0.57 |
 | matrix profile | 0 | 0 | 0 | **1.00** | 0 | 0 |
-| **ENSEMBLE** | .33 | **1.00** | **1.00** | **1.00** | **.67** | **.75** |
+| **ENSEMBLE** | 0.29 | 0.71 | 0.67 | **1.00** | 0.29 | 0.71 |
 
 No detector wins every column; each column has a specialist. Lesson 2's taxonomy predicted
 this: point → statistics, contextual → residual/multivariate, collective → windowed tests.

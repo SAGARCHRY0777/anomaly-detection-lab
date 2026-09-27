@@ -96,15 +96,17 @@ add polynomial features or swap ridge for gradient boosting; nothing else change
 
 ## 7.7 Benchmark
 
+These rows come from a seeded run of `examples/benchmark.py`; rerun it to reproduce them.
+
 | Detector | Event recall | FA / 10k | Delay |
 |---|---|---|---|
-| PCA SPE (best of lessons 4–6) | 35% | 0.8 | 41 |
-| **residual (ridge)** | **75%** | **0.8** | **4.7** |
-| iforest on residuals | 75% | 3.2 | 9.3 |
-| residual + CUSUM | 65% | 1.6 | 35 |
+| PCA SPE (best of lessons 4–6) | 0.28 | 0.00 | 51.9 |
+| **residual (ridge)** | 0.82 | 1.14 | 15.4 |
+| iforest on residuals | 0.82 | 2.28 | 15.2 |
+| residual + CUSUM | 0.53 | 1.42 | 38.7 |
 
-Per fault type — residual: spike 100%, level shift 75%, drift 100%, **stuck 33%**, noise 67%, correlation break 75%.
-Residual + CUSUM: level shift 100%, drift 100%.
+Per fault type — residual: spike 86%, level shift 86%, drift 100%, **stuck 50%**, noise 86%, correlation break 86%.
+Residual + CUSUM: level shift 71%, drift 67%, and **stuck 67%** — the one column where adding CUSUM to the residual beats the residual alone.
 
 Why stuck is weak: at the moment a sensor freezes its value equals the prediction, so the residual
 only grows as the operating point moves away. That is the stuck detector's job (lesson 3) —

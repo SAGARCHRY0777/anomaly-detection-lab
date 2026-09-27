@@ -106,16 +106,30 @@ Not implemented from scratch here (it needs a quadratic-programming solver); use
 
 ## 6.5 What the benchmark says
 
+These rows come from a seeded run of `examples/benchmark.py`; rerun it to reproduce them.
+
 | Detector (raw standardised sensors) | Event recall | FA / 10k |
 |---|---|---|
-| kNN distance | 20% | 0.8 |
-| LOF | 0% | 0.0 |
+| kNN distance | 0.07 | 2.56 |
+| LOF | 0.50 | 4.84 |
 
-Same root cause as Isolation Forest: in raw space, contextual faults land on or near *other*
-healthy operating points, which are dense. LOF is worst because a fault in a sparse transient
-region has sparse neighbours too, so its ratio stays ≈ 1. These methods shine when normal data is
-a set of well-separated clusters and anomalies are off all of them — e.g. on residuals or on
-per-window feature vectors.
+**The gap between these two rows is the lesson.** Both read the same raw space, and the only
+difference is what they compare a point against. kNN scores an *absolute* distance, so on a
+manifold whose density varies by regime it cannot tell "far because faulty" from "far because
+this operating point is simply sparse" — 0.07 recall. LOF divides by the local neighbourhood's
+own density, which cancels that variation, and it becomes the **strongest raw-space detector on
+this benchmark** at 0.50 — ahead of Mahalanobis (0.42), PCA SPE (0.28) and Isolation Forest,
+which scores 0.00.
+
+It pays for that in the column nobody quotes: **4.84 false alarms per 10k is the worst rate in
+the whole table.** Local normalisation is what lets LOF see a fault in a sparse region, and it is
+also what makes an ordinary sparse transient look like one. The comparison with Isolation Forest
+is the useful one — axis-parallel cuts cannot represent a curved, varying-density manifold at
+all, while a local density ratio can, at the cost of firing on the manifold's own thin patches.
+
+All of these improve sharply on residuals, for the reason lesson 7 gives: residuals collapse
+every regime onto one tight ball, so "far from normal" stops depending on which regime you are
+in — and absolute distance starts working again.
 
 ## Check yourself
 

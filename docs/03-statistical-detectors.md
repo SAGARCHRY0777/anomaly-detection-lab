@@ -103,7 +103,7 @@ range, so no distance- or density-based method can see it; a variance test sees 
 
 | detector | raw values | on residuals (lesson 7) |
 |---|---|---|
-| z-score (global) | 15% recall, 31.7 FA/10k | — |
+| z-score (global) | 0.03 recall, 3.13 FA/10k | — |
 | residual + CUSUM | — | 100% of level shifts and drifts |
 | stuck detector | 100% of stuck faults | — |
 

@@ -60,8 +60,8 @@ Benchmark, same thresholds, debounce on vs off:
 
 | Detector | recall (2-of-3) | FA/10k (2-of-3) | recall (raw) | FA/10k (raw) |
 |---|---|---|---|---|
-| residual (ridge) | 75% | 0.8 | 80% | 5.5 |
-| ENSEMBLE | 80% | 4.0 | 90% | 14.3 |
+| residual (ridge) | 0.82 | 1.14 | 0.85 | 4.27 |
+| ENSEMBLE | 0.60 | 4.55 | 0.85 | 6.83 |
 
 **Hysteresis** — separate on/off thresholds (alarm on above $\tau_{on}$, clear below $\tau_{off} < \tau_{on}$) —
 stops chattering when a score hovers at the line.

@@ -73,15 +73,19 @@ Demo (6 clean training runs, correlation break on EGT):
 
 ## 9.7 Benchmark
 
+These rows come from a seeded run of `examples/benchmark.py`; rerun it to reproduce them.
+
 | Detector | Event recall | FA / 10k |
 |---|---|---|
-| PCA SPE | 35% | 0.8 |
-| Autoencoder | 35% | 0.8 |
-| Residual (ridge, lags) | 75% | 0.8 |
+| PCA SPE | 0.28 | 0.00 |
+| Autoencoder | 0.50 | 1.71 |
+| Residual (ridge, lags) | 0.82 | 1.14 |
 
-Deep learning matched its linear sibling and lost to a two-line regression, because it had the
-**same information** (one instant, no lags). Model capacity cannot recover information the input
-does not contain. Give the AE windows and it can compete; that is the lesson, not "AEs are bad".
+The nonlinearity did buy something — the autoencoder nearly doubles PCA SPE's recall, which is
+what you would hope for from a nonlinear PCA on a curved manifold. It still loses heavily to a
+two-line ridge regression, because it had the **same information**: one instant, no lags. Model
+capacity can exploit a curve the linear model missed; it cannot recover information the input
+never contained. Give the AE windows and it can compete; that is the lesson, not "AEs are bad".
 
 ## Check yourself
 

@@ -105,11 +105,13 @@ that broke the relationship (`PCADetector.contributions`). That turns "something
 
 ## 4.8 Limits, and what the benchmark shows
 
+These rows come from a seeded run of `examples/benchmark.py`; rerun it to reproduce them.
+
 | Detector | Event recall | FA / 10k |
 |---|---|---|
-| Mahalanobis | 30% | 0.8 |
-| PCA SPE | 35% | 0.8 |
-| PCA T² | 5% | 2.4 |
+| Mahalanobis | 0.42 | 2.56 |
+| PCA SPE | 0.28 | 0.00 |
+| PCA T² | 0.03 | 0.85 |
 
 Why not better:
 - **Linear.** $\text{EGT} \propto n^2$ is a curve; PCA fits a straight line, leaving curvature in SPE as "normal noise" → loose limits.
