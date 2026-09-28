@@ -46,7 +46,8 @@ The same Isolation Forest goes from 10% to 75% when fed residuals instead of raw
 
 ```bash
 pip install -e ".[dev]"          # numpy, scipy (+ pytest, scikit-learn, matplotlib for dev)
-python -m pytest -q              # 17 tests: each algorithm vs sklearn or brute force
+python -m pytest -q              # 19 tests: algorithms vs sklearn, and the lessons vs the benchmark
+python -m pytest -q -m "not slow"   # just the fast ones (skips the benchmark re-run)
 python examples/benchmark.py --fast
 python examples/benchmark.py --fast --no-debounce
 ```

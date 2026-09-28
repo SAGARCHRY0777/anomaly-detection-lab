@@ -1,0 +1,60 @@
+name: tests
+
+# The encoding bug that stopped the whole suite from parsing, and seven lessons
+# quoting figures the code no longer produced, both survived a push because
+# nothing ran on push. This is that.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      # Fast: every algorithm against scikit-learn or brute force.
+      - name: Unit tests
+        run: pytest -q -m "not slow"
+
+      # Slow: re-runs the benchmark and checks the lessons still quote it
+      # correctly. One version is enough -- the figures do not depend on the
+      # interpreter, and running it twice would double the slowest job.
+      - name: Lessons match the benchmark
+        if: matrix.python-version == '3.12'
+        run: pytest -q -m slow
+
+      # A lesson that references a file that has been renamed is a broken
+      # lesson, and markdown will not tell you.
+      - name: Internal links resolve
+        if: matrix.python-version == '3.12'
+        run: |
+          python - <<'PY'
+          import pathlib, re, sys
+          root = pathlib.Path(".")
+          bad = []
+          for md in root.rglob("*.md"):
+              for link in re.findall(r"\]\((?!https?://|#)([^)#]+)", md.read_text(encoding="utf-8")):
+                  if not (md.parent / link).resolve().exists():
+                      bad.append(f"{md}: {link}")
+          print(f"checked links in {len(list(root.rglob('*.md')))} markdown files")
+          if bad:
+              print("broken:", *bad, sep="\n  ")
+              sys.exit(1)
+          PY
