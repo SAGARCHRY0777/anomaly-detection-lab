@@ -1,0 +1,29 @@
+# Automated dependency updates.
+#
+# Action versions here are pinned, which is deliberate -- a mutable tag is a
+# promise that an account you do not control stays uncompromised. The cost of
+# pinning is that nothing updates itself, so this is the other half of it:
+# dependabot proposes the bump, CI proves it, you merge it.
+#
+# Grouped and monthly, so this stays a few reviewable PRs rather than a swarm.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels: ["dependencies", "ci"]
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "python"]
+    groups:
+      python:
+        patterns: ["*"]
